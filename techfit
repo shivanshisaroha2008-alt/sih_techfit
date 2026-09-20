@@ -1,0 +1,77 @@
+import streamlit as st
+import time
+
+# Page Configuration
+st.set_page_config(page_title="Tech Fit - Smart Assistant", layout="wide")
+
+# App Header
+st.title("Tech Fit: Adaptive Micro-Fitness Assistant")
+st.write("Smart India Hackathon Prototype | Next-Gen AI Workplace Wellness Platform")
+
+st.divider()
+
+# Main layout split into two columns
+col1, col2 = st.columns([1, 2])
+
+# Column 1: User Health Profile & Smart Inputs
+with col1:
+    st.subheader("User Profile and Ergonomics")
+    lifestyle = st.selectbox("Select Workplace Lifestyle", ["Desk Worker", "Standing Worker", "Field Worker"])
+    pain_area = st.multiselect("Select Discomfort Area", ["Lower Back Pain", "Neck Stiffness", "Wrist Strain"], default=["Lower Back Pain"])
+    work_hours = st.slider("Daily Screen Time in Hours", 1, 14, 8)
+    
+    # Dynamic insight banner based on user's input
+    if work_hours > 8:
+        st.warning(f"High Fatigue Risk: {work_hours} hours of continuous screen time detected. Frequent micro-breaks recommended.")
+    else:
+        st.success("Moderate Screen Time: Optimal balance maintained.")
+
+# Column 2: Personalized Routine & Interactive Timer
+with col2:
+    st.subheader("Personalized AI Adaptive Routine")
+    
+    # Dynamic styling based on selected pain area
+    if "Lower Back Pain" in pain_area:
+        st.error("Active Mode: Lower Back and Core Decompression")
+        st.write("Recommended Exercise: Pelvic Tilt and Seated Spine Stretch")
+    else:
+        st.warning("Active Mode: General Upper Body and Neck Relief")
+        st.write("Recommended Exercise: Cervical Retraction and Shoulder Shrugs")
+        
+    st.info("Instructions: Sit back, align your posture, and follow the 10-second guided interval.")
+    
+    # Interactive 10-Second Quick Timer with live visual feedback
+    if st.button("Start 10-Second Micro-Intervention", type="primary"):
+        progress_bar = st.progress(0)
+        status_text = st.empty()
+        
+        for i in range(10):
+            time.sleep(1)
+            progress_bar.progress((i + 1) * 10)
+            status_text.text(f"Actively Stretching... {10 - i} seconds remaining")
+            
+        status_text.success("Amazing job! Ergonomic strain reduced successfully.")
+
+st.divider()
+
+# Secondary layout split for Analytics and Simulated AI Posture Sensor
+col_a, col_b = st.columns(2)
+
+# Column A: Daily Progress Analytics Dashboard
+with col_a:
+    st.subheader("Live Health Analytics")
+    st.metric(label="Total Micro-Stretches Today", value="5 Sessions", delta="+2 last hour")
+    st.metric(label="Estimated Posture Improvement", value="42.5 Percent", delta="+4.5% today")
+    st.write("Daily Wellness Goal Target: 85%")
+    st.progress(0.85)
+
+# Column B: AI Posture Monitoring Sensor Simulation
+with col_b:
+    st.subheader("AI Computer Vision Posture Sensor")
+    camera_check = st.checkbox("Enable Live Webcam Feed Simulation")
+    
+    if camera_check:
+        st.success("MediaPipe Vision Engine Active: Tracking Spine Alignment")
+        st.metric(label="Real-Time Spine Angle", value="94 Degrees", delta="Optimal Alignment (Safe)")
+    else:
+        st.info("Toggle the checkbox above to simulate real-time AI webcam tracking.")
